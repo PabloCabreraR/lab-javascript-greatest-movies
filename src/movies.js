@@ -78,18 +78,33 @@ const orderAlphabetically = (movies) => {
 
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
 const turnHoursToMinutes = (movies) => {
-    const moviesList = movies.filter((movie)=>{
-      return movie
-    })
-    const resultMoviesList = moviesList.map((movie)=>{
+    const copyOfMovies = [...movies]
+    const resultMoviesList = copyOfMovies.map((movie)=>{
       let time = movie.duration
-      let hoursToMinutes = (time.slice(0,time.indexOf('h')))*60
-      let minutes = time.slice(time.indexOf(' ')+1, time.indexOf('m'))
-      let sum = Number(minutes) + Number(hoursToMinutes)
-      movie.duration = sum
-      return movie
+      if(movie.duration.includes('min') && movie.duration.includes('h')){
+        let hoursToMinutes = (time.slice(0,time.indexOf('h')))*60
+        let minutes = time.slice(time.indexOf(' ')+1, time.indexOf('m'))
+        let sum = Number(minutes) + Number(hoursToMinutes)
+        movie.duration = Number(sum)
+        return movie
+      }else if(movie.duration.includes('h')){
+        let hours = Number((time.slice(0,time.indexOf('h'))))*60
+        movie.duration = Number(hours)
+        return movie
+      }else{
+        let min = time.slice(0, time.indexOf('m'))
+        movie.duration = Number(min)
+        return movie
+      }
     })
     return resultMoviesList
   }
 
 // BONUS - Iteration 8: Best yearly rate average - Best yearly rate average
+const bestYearAvg = (movies) => {
+    if (movies.length === 0){
+        return null
+    }else{
+        return `The best year was <YEAR> with an average rate of <RATE>`
+    }
+}
