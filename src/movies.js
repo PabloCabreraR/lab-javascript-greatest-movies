@@ -51,7 +51,8 @@ const dramaMoviesRate = (movies) => {
 
 // Iteration 5: Ordering by year - Order by year, ascending (in growing order)
 const orderByYear = (movies) => {
-    const listOfMovies = movies.map((movie)=> movie)
+    // const listOfMovies = movies.map((movie)=> movie)
+    const listOfMovies = [...movies]
     const alphabeticalOrder = listOfMovies.sort((a, b)=>{
       if (a.title > b.title) return 1
       if (a.title <= b.title) return -1
@@ -64,13 +65,14 @@ const orderByYear = (movies) => {
 
 // Iteration 6: Alphabetic Order - Order by title and print the first 20 titles
 const orderAlphabetically = (movies) => {
-    const newMovies = movies.map((movie)=> movie)
+    // const newMovies = movies.map((movie)=> movie)
+    const newMovies = [...movies]
     const alphabeticalOrder = newMovies.sort((a, b)=>{
      if (a.title > b.title) return 1
      if (a.title <= b.title) return -1
     })
-    const only20movies = alphabeticalOrder.filter((movie)=>{
-      return (alphabeticalOrder.indexOf(movie) < 20)
+    const only20movies = alphabeticalOrder.filter((movie, index)=>{
+      return (index < 20)
     })
     const moviesTitles = only20movies.map((movie)=> movie.title)
     return moviesTitles
@@ -78,26 +80,39 @@ const orderAlphabetically = (movies) => {
 
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
 const turnHoursToMinutes = (movies) => {
-    const copyOfMovies = [...movies]
-    const resultMoviesList = copyOfMovies.map((movie)=>{
+    try{
+      const copyOfMovies = [...movies]
+      const resultMoviesList = copyOfMovies.map((movie)=>{
       let time = movie.duration
       if(movie.duration.includes('min') && movie.duration.includes('h')){
         let hoursToMinutes = (time.slice(0,time.indexOf('h')))*60
         let minutes = time.slice(time.indexOf(' ')+1, time.indexOf('m'))
         let sum = Number(minutes) + Number(hoursToMinutes)
-        movie.duration = Number(sum)
-        return movie
+        const newMovie = {
+          ...movie,
+          duration: Number(sum)
+        }
+        return newMovie
       }else if(movie.duration.includes('h')){
         let hours = Number((time.slice(0,time.indexOf('h'))))*60
-        movie.duration = Number(hours)
-        return movie
+        const newMovie2 = {
+          ...movie,
+          duration: Number(hours)
+        }
+        return newMovie2
       }else{
         let min = time.slice(0, time.indexOf('m'))
-        movie.duration = Number(min)
-        return movie
+        const newMovie3 = {
+          ...movie,
+          duration: Number(min)
+        }
+        return newMovie3
       }
     })
     return resultMoviesList
+    } catch {
+      return 0
+    }
   }
 
 // BONUS - Iteration 8: Best yearly rate average - Best yearly rate average
@@ -105,6 +120,10 @@ const bestYearAvg = (movies) => {
     if (movies.length === 0){
         return null
     }else{
-        return `The best year was <YEAR> with an average rate of <RATE>`
+      const moviesSortedByYear = movies.sort((a, b)=>{
+        return a.year - b.year
+      })
+
+      return `The best year was <YEAR> with an average rate of <RATE>`
     }
 }
